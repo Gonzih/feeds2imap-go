@@ -1,0 +1,166 @@
+package main
+
+import (
+	"bytes"
+	"fmt"
+	"html/template"
+	"io"
+	"log"
+	"strings"
+	"time"
+
+	"github.com/emersion/go-imap/client"
+	message "github.com/emersion/go-message"
+	"github.com/emersion/go-message/mail"
+	"github.com/mmcdole/gofeed"
+	"github.com/spf13/viper"
+)
+
+var mailTemplate = template.Must(template.New("mail").Parse(
+	`<table>
+	<tbody>
+	<tr><td>
+	<a href='{{ .Link }}'>{{ .Title }}</a>
+	<hr>
+	</td></tr>
+	<tr><td>
+	{{ .Author }}
+	<hr>
+	</td></tr>
+	<tr><td>
+	{{ .Content }}
+	</td></tr>
+	</tbody>
+	</table>`))
+
+type templatePayload struct {
+	Link    string
+	Title   string
+	Author  string
+	Content template.HTML
+}
+
+func FormatContent(item *gofeed.Item) (string, error) {
+	var payload templatePayload
+
+	payload.Link = item.Link
+	payload.Title = item.Title
+
+	if item.Author != nil {
+		payload.Author = fmt.Sprintf("%s %s", item.Author.Name, item.Author.Email)
+	}
+
+	if len(item.Content) > 0 {
+		payload.Content = template.HTML(item.Content)
+	} else {
+		payload.Content = template.HTML(item.Description)
+	}
+
+	var buffer bytes.Buffer
+
+	err := mailTemplate.Execute(&buffer, payload)
+
+	if err != nil {
+		return "", err
+	}
+
+	return buffer.String(), nil
+}
+
+func NewMessage(item *gofeed.Item) (bytes.Buffer, error) {
+	var b bytes.Buffer
+
+	fromName := viper.GetString("imap.from.name")
+
+	if item.Author != nil {
+		fromName = fmt.Sprintf("%s %s", item.Author.Name, item.Author.Email)
+	}
+
+	from := []*mail.Address{{fromName, viper.GetString("imap.from.email")}}
+	to := []*mail.Address{{viper.GetString("imap.to.name"), viper.GetString("imap.to.email")}}
+
+	h := mail.NewHeader()
+	h.SetContentType("multipart/alternative", nil)
+	h.SetDate(time.Now())
+	h.SetAddressList("From", from)
+	h.SetAddressList("To", to)
+	h.SetSubject(item.Title)
+
+	// Create a new mail writer
+	messageWriter, err := message.CreateWriter(&b, h.Header)
+	defer messageWriter.Close()
+	if err != nil {
+		return b, err
+	}
+
+	htmlHeader := make(message.Header)
+	htmlHeader.SetContentType("text/html", nil)
+	htmlWriter, err := messageWriter.CreatePart(htmlHeader)
+	defer htmlWriter.Close()
+	if err != nil {
+		return b, err
+	}
+
+	content, err := FormatContent(item)
+	if err != nil {
+		return b, err
+	}
+
+	io.WriteString(htmlWriter, content)
+
+	return b, nil
+}
+
+func AppendNewItemsViaIMAP(items ItemsWithFolders) error {
+	if viper.GetBool("debug") {
+		log.Printf("Found %d new items", len(items))
+	}
+
+	hostPort := fmt.Sprintf("%s:%d", viper.GetString("imap.host"), viper.GetInt("imap.port"))
+	c, err := client.DialTLS(hostPort, nil)
+	if err != nil {
+		return err
+	}
+
+	defer c.Logout()
+
+	if err := c.Login(viper.GetString("imap.username"), viper.GetString("imap.password")); err != nil {
+		return err
+	}
+
+	if viper.GetBool("debug") {
+		log.Println("Logged in to IMAP")
+	}
+
+	for _, entry := range items {
+		folderName := entry.Folder
+
+		if viper.GetBool("imap.folder_capitalize") {
+			folderName = strings.Title(folderName)
+		}
+
+		folder := fmt.Sprintf("%s/%s", viper.GetString("imap.folder_prefix"), folderName)
+
+		_ = c.Create(folder)
+
+		msg, err := NewMessage(entry.Item)
+
+		if err != nil {
+			return err
+		}
+
+		literal := bytes.NewReader(msg.Bytes())
+
+		if viper.GetBool("debug") {
+			log.Printf("Appending item to %s", folder)
+		}
+
+		err = c.Append(folder, []string{}, time.Now(), literal)
+
+		if err != nil {
+			return err
+		}
+	}
+
+	return nil
+}

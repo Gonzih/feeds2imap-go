@@ -1,0 +1,15 @@
+package: feeds2imap.go
+import:
+- package: github.com/mmcdole/gofeed
+  version: ^1.0.0-beta
+- package: github.com/emersion/go-imap
+  version: master
+  subpackages:
+  - '...'
+- package: github.com/emersion/go-message
+  version: master
+  subpackages:
+  - '...'
+- package: github.com/emersion/go-textwrapper
+  version: master
+- package: github.com/spf13/viper

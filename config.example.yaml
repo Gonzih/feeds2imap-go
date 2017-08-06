@@ -1,0 +1,45 @@
+paths:
+  cache: "cache.json"
+
+daemon:
+  # Delay that daemon sohuld wait between read/write attempts
+  delay: 15
+
+imap:
+  # imap host
+  host: imap.gmail.com
+  # imap port
+  port: 993
+  # imap username
+  username: mymail@gmail.com
+  # imap password
+  password: mypass
+  # prefix to use when creating imap folders (RSS/myfolder)
+  folder_prefix: RSS
+  # Should folder names be capitaziled (by default everything is lowercase)
+  folder_capitalize: true
+  # To field that will be used in email
+  to:
+    name: My Name
+    email: mymail@gmail.com
+  # From field that will be used in email
+  from:
+    # Name will be ignored if feed has author data
+    name: RSS Bot
+    email: rss@mail.com
+
+# Print debug messages
+debug: true
+
+# Urls configuration
+urls:
+  Rust:
+  - http://blog.rust-lang.org/feed.xml
+  Nim:
+  - http://nim-lang.org/news.xml
+  Clojure:
+  - http://feeds.cognitect.com/blog/feed.rss
+  - http://swannodette.github.com/atom.xml
+  - http://blog.fikesfarm.com/feed.xml
+  Elixir:
+  - http://feeds.feedburner.com/ElixirLang

@@ -1,0 +1,61 @@
+hash: 22d2778ef5d26593fbcc40b0d0f81fe1f5a185e328838ee2ac239ed47b6a3079
+updated: 2017-08-07T10:35:42.91279021+02:00
+imports:
+- name: github.com/andybalholm/cascadia
+  version: 349dd0209470eabd9514242c688c403c0926d266
+- name: github.com/emersion/go-imap
+  version: f467556f6189c97ee20b309f16f6ce2c3f3e2059
+  subpackages:
+  - '...'
+  - client
+  - commands
+  - responses
+  - utf7
+- name: github.com/emersion/go-message
+  version: 1716e3f473f914d0f63389271fbe851c749e0ab4
+  subpackages:
+  - '...'
+  - charset
+  - mail
+- name: github.com/emersion/go-sasl
+  version: 7e096a0a6197b89989e8cc31016daa67c8c62051
+- name: github.com/emersion/go-textwrapper
+  version: d0e65e56babe3f687ff94c1d764ca0e6aa7723ee
+- name: github.com/mmcdole/gofeed
+  version: 303223474e837398b2f8a265e5572958bb5568c0
+  subpackages:
+  - atom
+  - extensions
+  - internal/shared
+  - rss
+- name: github.com/mmcdole/goxpp
+  version: 77e4a51a73ed99ee3f33c1474dc166866304acbd
+- name: github.com/PuerkitoBio/goquery
+  version: 8806ada2a4ab225c06e9106f9631be80932db7ce
+- name: github.com/spf13/viper
+  version: 25b30aa063fc18e48662b86996252eabdcf2f0c7
+- name: golang.org/x/net
+  version: f5079bd7f6f74e23c4d65efa0f4ce14cbd6a3c0f
+  subpackages:
+  - html
+  - html/atom
+  - html/charset
+- name: golang.org/x/text
+  version: 767daa157b4d460bba02409ff856ddeeb8e76ab7
+  subpackages:
+  - encoding
+  - encoding/charmap
+  - encoding/htmlindex
+  - encoding/internal
+  - encoding/internal/identifier
+  - encoding/japanese
+  - encoding/korean
+  - encoding/simplifiedchinese
+  - encoding/traditionalchinese
+  - encoding/unicode
+  - internal/tag
+  - internal/utf8internal
+  - language
+  - runes
+  - transform
+testImports: []
