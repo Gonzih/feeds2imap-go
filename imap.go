@@ -18,16 +18,16 @@ import (
 
 var mailTemplate = template.Must(template.New("mail").Parse(
 	`<table>
-	<tbody>
-	<tr><td>
-	<a href='{{ .Link }}'>{{ .Title }}</a> {{ .Author }}
-	<hr>
-	</td></tr>
-	<tr><td>
-	{{ .Content }}
-	</td></tr>
-	</tbody>
-	</table>`))
+<tbody>
+<tr><td>
+<a href='{{ .Link }}'>{{ .Title }}</a> {{ .Author }}
+<hr>
+</td></tr>
+<tr><td>
+{{ .Content }}
+</td></tr>
+</tbody>
+</table>`))
 
 type templatePayload struct {
 	Link    string
