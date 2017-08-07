@@ -11,22 +11,32 @@ import (
 	"github.com/spf13/viper"
 )
 
+// InputURLs represents freshly parsed configuration
 type InputURLs map[string][]string
+
+// FlatURLs represents url -> folder map
 type FlatURLs map[string]string
 
+// FeedWithFolder represents folder name and feed item combined
 type FeedWithFolder struct {
 	Feed   *gofeed.Feed
 	Folder string
 }
+
+// FeedsWithFolders represents collection of FeedWithFolder
 type FeedsWithFolders []FeedWithFolder
 
+// ItemsWithFolders represents rss item (post), folder and original feed title cobined
 type ItemWithFolder struct {
 	Item      *gofeed.Item
 	Folder    string
 	FeedTitle string
 }
+
+// ItemsWithFolders represents collection of ItemWithFolder
 type ItemsWithFolders []ItemWithFolder
 
+// ItemsCache represents GUIDs cache
 type ItemsCache []string
 
 func readInputURLsFile() InputURLs {
@@ -91,6 +101,7 @@ func flattenFeedData(feeds FeedsWithFolders) (items ItemsWithFolders) {
 	return
 }
 
+// ReadCacheFile reads cache file from fs
 func ReadCacheFile() ItemsCache {
 	var cache ItemsCache
 
@@ -119,6 +130,7 @@ func ReadCacheFile() ItemsCache {
 	return cache
 }
 
+// WriteCacheFile dumps content of cache to the fs
 func WriteCacheFile(cache ItemsCache) error {
 	json, err := json.Marshal(&cache)
 
@@ -154,6 +166,7 @@ OUTER:
 	return
 }
 
+// FetchNewFeedItems loads configuration, fetches rss items and discards ones that are in cache already returning new items and new version of a cache
 func FetchNewFeedItems() (ItemsWithFolders, ItemsCache) {
 	input := readInputURLsFile()
 

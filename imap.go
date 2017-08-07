@@ -35,7 +35,7 @@ type templatePayload struct {
 	Content template.HTML
 }
 
-func FormatContent(item *gofeed.Item) (string, error) {
+func formatContent(item *gofeed.Item) (string, error) {
 	var payload templatePayload
 
 	payload.Link = item.Link
@@ -62,7 +62,7 @@ func FormatContent(item *gofeed.Item) (string, error) {
 	return buffer.String(), nil
 }
 
-func NewMessage(item *gofeed.Item, feedTitle string) (bytes.Buffer, error) {
+func newMessage(item *gofeed.Item, feedTitle string) (bytes.Buffer, error) {
 	var b bytes.Buffer
 
 	fromName := feedTitle
@@ -97,7 +97,7 @@ func NewMessage(item *gofeed.Item, feedTitle string) (bytes.Buffer, error) {
 		return b, err
 	}
 
-	content, err := FormatContent(item)
+	content, err := formatContent(item)
 	if err != nil {
 		return b, err
 	}
@@ -125,6 +125,7 @@ func newIMAPClient() (*client.Client, error) {
 	return c, nil
 }
 
+// AppendNewItemsViaIMAP puts items in to corresponding imap folders
 func AppendNewItemsViaIMAP(items ItemsWithFolders) error {
 	if viper.GetBool("debug") {
 		log.Printf("Found %d new items", len(items))
@@ -150,7 +151,7 @@ func AppendNewItemsViaIMAP(items ItemsWithFolders) error {
 
 		_ = client.Create(folder)
 
-		msg, err := NewMessage(entry.Item, entry.FeedTitle)
+		msg, err := newMessage(entry.Item, entry.FeedTitle)
 		if err != nil {
 			return err
 		}
