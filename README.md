@@ -13,7 +13,7 @@ go get github.com/Gonzih/feeds2imap-go
 # Usage
 
 ```bash
-feeds2imap-go --daemon --config config.yml
+feeds2imap-go --daemon --config config.yaml
 ```
 
 # Configuration
