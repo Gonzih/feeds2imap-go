@@ -2,7 +2,7 @@ paths:
   cache: "cache.json"
 
 daemon:
-  # Delay that daemon sohuld wait between read/write attempts
+  # Delay that daemon should wait between read/write attempts
   delay: 15
 
 imap:
@@ -16,7 +16,7 @@ imap:
   password: mypass
   # prefix to use when creating imap folders (RSS/myfolder)
   folder_prefix: RSS
-  # Should folder names be capitaziled (by default everything is lowercase)
+  # Should folder names be capitalized (by default everything is lowercase)
   folder_capitalize: true
   # To field that will be used in email
   to:
@@ -31,7 +31,7 @@ imap:
 # Print debug messages
 debug: true
 
-# Urls configuration
+# RSS/Atom urls configuration
 urls:
   rust:
   - http://blog.rust-lang.org/feed.xml
