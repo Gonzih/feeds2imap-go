@@ -81,7 +81,7 @@ func NewMessage(item *gofeed.Item) (bytes.Buffer, error) {
 
 	h := mail.NewHeader()
 	h.SetContentType("multipart/alternative", nil)
-	h.SetDate(time.Now())
+	h.SetDate(*item.PublishedParsed)
 	h.SetAddressList("From", from)
 	h.SetAddressList("To", to)
 	h.SetSubject(item.Title)
@@ -133,30 +133,30 @@ func AppendNewItemsViaIMAP(items ItemsWithFolders) error {
 	}
 
 	for _, entry := range items {
-		folderName := entry.Folder
+		if entry.Item.PublishedParsed == nil {
+			t := time.Now()
+			entry.Item.PublishedParsed = &t
+		}
 
+		folderName := entry.Folder
 		if viper.GetBool("imap.folder_capitalize") {
 			folderName = strings.Title(folderName)
 		}
-
 		folder := fmt.Sprintf("%s/%s", viper.GetString("imap.folder_prefix"), folderName)
 
 		_ = c.Create(folder)
 
 		msg, err := NewMessage(entry.Item)
-
 		if err != nil {
 			return err
 		}
-
-		literal := bytes.NewReader(msg.Bytes())
 
 		if viper.GetBool("debug") {
 			log.Printf("Appending item to %s", folder)
 		}
 
-		err = c.Append(folder, []string{}, time.Now(), literal)
-
+		literal := bytes.NewReader(msg.Bytes())
+		err = c.Append(folder, []string{}, *entry.Item.PublishedParsed, literal)
 		if err != nil {
 			return err
 		}
