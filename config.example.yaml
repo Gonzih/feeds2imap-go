@@ -43,3 +43,5 @@ urls:
   - http://blog.fikesfarm.com/feed.xml
   Elixir:
   - http://feeds.feedburner.com/ElixirLang
+  Go:
+  - https://blog.golang.org/feed.atom
