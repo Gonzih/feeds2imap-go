@@ -107,26 +107,38 @@ func NewMessage(item *gofeed.Item) (bytes.Buffer, error) {
 	return b, nil
 }
 
-func AppendNewItemsViaIMAP(items ItemsWithFolders) error {
-	if viper.GetBool("debug") {
-		log.Printf("Found %d new items", len(items))
-	}
-
+func newIMAPClient() (*client.Client, error) {
 	hostPort := fmt.Sprintf("%s:%d", viper.GetString("imap.host"), viper.GetInt("imap.port"))
 	c, err := client.DialTLS(hostPort, nil)
 	if err != nil {
-		return err
+		return c, err
 	}
 
 	defer c.Logout()
 
 	if err := c.Login(viper.GetString("imap.username"), viper.GetString("imap.password")); err != nil {
-		return err
+		return c, err
 	}
 
 	if viper.GetBool("debug") {
 		log.Println("Logged in to IMAP")
 	}
+
+	return c, nil
+}
+
+func AppendNewItemsViaIMAP(items ItemsWithFolders) error {
+	if viper.GetBool("debug") {
+		log.Printf("Found %d new items", len(items))
+	}
+
+	client, err := newIMAPClient()
+
+	if err != nil {
+		return err
+	}
+
+	defer client.LoggedOut()
 
 	for _, entry := range items {
 		if entry.Item.PublishedParsed == nil {
@@ -140,7 +152,7 @@ func AppendNewItemsViaIMAP(items ItemsWithFolders) error {
 		}
 		folder := fmt.Sprintf("%s/%s", viper.GetString("imap.folder_prefix"), folderName)
 
-		_ = c.Create(folder)
+		_ = client.Create(folder)
 
 		msg, err := NewMessage(entry.Item)
 		if err != nil {
@@ -152,7 +164,7 @@ func AppendNewItemsViaIMAP(items ItemsWithFolders) error {
 		}
 
 		literal := bytes.NewReader(msg.Bytes())
-		err = c.Append(folder, []string{}, *entry.Item.PublishedParsed, literal)
+		err = client.Append(folder, []string{}, *entry.Item.PublishedParsed, literal)
 		if err != nil {
 			return err
 		}
