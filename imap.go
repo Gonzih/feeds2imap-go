@@ -62,13 +62,13 @@ func FormatContent(item *gofeed.Item) (string, error) {
 	return buffer.String(), nil
 }
 
-func NewMessage(item *gofeed.Item) (bytes.Buffer, error) {
+func NewMessage(item *gofeed.Item, feedTitle string) (bytes.Buffer, error) {
 	var b bytes.Buffer
 
-	fromName := viper.GetString("imap.from.name")
+	fromName := feedTitle
 
-	if item.Author != nil {
-		fromName = fmt.Sprintf("%s %s", item.Author.Name, item.Author.Email)
+	if len(fromName) == 0 {
+		fromName = viper.GetString("imap.from.name")
 	}
 
 	from := []*mail.Address{{fromName, viper.GetString("imap.from.email")}}
@@ -150,7 +150,7 @@ func AppendNewItemsViaIMAP(items ItemsWithFolders) error {
 
 		_ = client.Create(folder)
 
-		msg, err := NewMessage(entry.Item)
+		msg, err := NewMessage(entry.Item, entry.FeedTitle)
 		if err != nil {
 			return err
 		}

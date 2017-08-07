@@ -21,8 +21,9 @@ type FeedWithFolder struct {
 type FeedsWithFolders []FeedWithFolder
 
 type ItemWithFolder struct {
-	Item   *gofeed.Item
-	Folder string
+	Item      *gofeed.Item
+	Folder    string
+	FeedTitle string
 }
 type ItemsWithFolders []ItemWithFolder
 
@@ -83,7 +84,7 @@ func flattenFeedData(feeds FeedsWithFolders) (items ItemsWithFolders) {
 	for _, fWithFolder := range feeds {
 		folder := fWithFolder.Folder
 		for _, item := range fWithFolder.Feed.Items {
-			items = append(items, ItemWithFolder{Item: item, Folder: folder})
+			items = append(items, ItemWithFolder{Item: item, Folder: folder, FeedTitle: fWithFolder.Feed.Title})
 		}
 	}
 
