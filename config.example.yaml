@@ -33,15 +33,15 @@ debug: true
 
 # Urls configuration
 urls:
-  Rust:
+  rust:
   - http://blog.rust-lang.org/feed.xml
-  Nim:
+  nim:
   - http://nim-lang.org/news.xml
-  Clojure:
+  clojure:
   - http://feeds.cognitect.com/blog/feed.rss
   - http://swannodette.github.com/atom.xml
   - http://blog.fikesfarm.com/feed.xml
-  Elixir:
+  elixir:
   - http://feeds.feedburner.com/ElixirLang
-  Go:
+  go:
   - https://blog.golang.org/feed.atom
