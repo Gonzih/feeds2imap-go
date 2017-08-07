@@ -114,8 +114,6 @@ func newIMAPClient() (*client.Client, error) {
 		return c, err
 	}
 
-	defer c.Logout()
-
 	if err := c.Login(viper.GetString("imap.username"), viper.GetString("imap.password")); err != nil {
 		return c, err
 	}
@@ -133,11 +131,9 @@ func AppendNewItemsViaIMAP(items ItemsWithFolders) error {
 	}
 
 	client, err := newIMAPClient()
-
 	if err != nil {
 		return err
 	}
-
 	defer client.Logout()
 
 	for _, entry := range items {
