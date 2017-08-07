@@ -91,9 +91,9 @@ func NewMessage(item *gofeed.Item) (bytes.Buffer, error) {
 		return b, err
 	}
 
-	htmlHeader := make(message.Header)
+	htmlHeader := mail.NewHeader()
 	htmlHeader.SetContentType("text/html", mediaParams)
-	htmlWriter, err := messageWriter.CreatePart(htmlHeader)
+	htmlWriter, err := messageWriter.CreatePart(htmlHeader.Header)
 	defer htmlWriter.Close()
 	if err != nil {
 		return b, err
