@@ -138,7 +138,7 @@ func AppendNewItemsViaIMAP(items ItemsWithFolders) error {
 		return err
 	}
 
-	defer client.LoggedOut()
+	defer client.Logout()
 
 	for _, entry := range items {
 		if entry.Item.PublishedParsed == nil {
