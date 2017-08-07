@@ -75,8 +75,10 @@ func NewMessage(item *gofeed.Item) (bytes.Buffer, error) {
 	from := []*mail.Address{{fromName, viper.GetString("imap.from.email")}}
 	to := []*mail.Address{{viper.GetString("imap.to.name"), viper.GetString("imap.to.email")}}
 
+	mediaParams := map[string]string{"charset": "utf-8"}
+
 	h := mail.NewHeader()
-	h.SetContentType("multipart/alternative", nil)
+	h.SetContentType("multipart/alternative", mediaParams)
 	h.SetDate(*item.PublishedParsed)
 	h.SetAddressList("From", from)
 	h.SetAddressList("To", to)
@@ -90,7 +92,7 @@ func NewMessage(item *gofeed.Item) (bytes.Buffer, error) {
 	}
 
 	htmlHeader := make(message.Header)
-	htmlHeader.SetContentType("text/html", nil)
+	htmlHeader.SetContentType("text/html", mediaParams)
 	htmlWriter, err := messageWriter.CreatePart(htmlHeader)
 	defer htmlWriter.Close()
 	if err != nil {
