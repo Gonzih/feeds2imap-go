@@ -19,7 +19,7 @@ var mailTemplate = template.Must(template.New("mail").Parse(
 	`<table>
 <tbody>
 <tr><td>
-<a href="{{ .Link }}">{{ .Title }}</a> {{ .Author }}
+<a href="{{ .Link }}">{{ .Title }}</a> | {{ .Author }}
 <hr>
 </td></tr>
 <tr><td>
