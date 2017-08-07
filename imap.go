@@ -10,7 +10,6 @@ import (
 	"time"
 
 	"github.com/emersion/go-imap/client"
-	message "github.com/emersion/go-message"
 	"github.com/emersion/go-message/mail"
 	"github.com/mmcdole/gofeed"
 	"github.com/spf13/viper"
@@ -20,7 +19,7 @@ var mailTemplate = template.Must(template.New("mail").Parse(
 	`<table>
 <tbody>
 <tr><td>
-<a href='{{ .Link }}'>{{ .Title }}</a> {{ .Author }}
+<a href="{{ .Link }}">{{ .Title }}</a> {{ .Author }}
 <hr>
 </td></tr>
 <tr><td>
@@ -84,16 +83,15 @@ func NewMessage(item *gofeed.Item) (bytes.Buffer, error) {
 	h.SetAddressList("To", to)
 	h.SetSubject(item.Title)
 
-	// Create a new mail writer
-	messageWriter, err := message.CreateWriter(&b, h.Header)
+	messageWriter, err := mail.CreateWriter(&b, h)
 	defer messageWriter.Close()
 	if err != nil {
 		return b, err
 	}
 
-	htmlHeader := mail.NewHeader()
+	htmlHeader := mail.NewTextHeader()
 	htmlHeader.SetContentType("text/html", mediaParams)
-	htmlWriter, err := messageWriter.CreatePart(htmlHeader.Header)
+	htmlWriter, err := messageWriter.CreateSingleText(htmlHeader)
 	defer htmlWriter.Close()
 	if err != nil {
 		return b, err
