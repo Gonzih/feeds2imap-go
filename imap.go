@@ -6,6 +6,7 @@ import (
 	"html/template"
 	"io"
 	"log"
+	"net/url"
 	"strings"
 	"time"
 
@@ -35,10 +36,24 @@ type templatePayload struct {
 	Content template.HTML
 }
 
+func formatLink(rawLink string) string {
+	u, err := url.Parse(rawLink)
+	if err != nil {
+		log.Printf("Error parsing link \"%s\": %s", rawLink, err)
+		return rawLink
+	}
+
+	if u.Scheme == "" {
+		u.Scheme = "http"
+	}
+
+	return u.String()
+}
+
 func formatContent(item *gofeed.Item) (string, error) {
 	var payload templatePayload
 
-	payload.Link = item.Link
+	payload.Link = formatLink(item.Link)
 	payload.Title = item.Title
 
 	if item.Author != nil {
