@@ -24,8 +24,7 @@ var templateFuncs = template.FuncMap{
 
 var mailTemplate = template.Must(template.New("mail").
 	Funcs(templateFuncs).
-	Parse(
-		`<table>
+	Parse(`<table>
 <tbody>
 <tr><td>
 <a href="{{ .Link }}">{{ .Title }}</a>{{ if .Author | emptyString | not }} | {{ .Author }}{{ end }}
