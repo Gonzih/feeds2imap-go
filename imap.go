@@ -16,11 +16,19 @@ import (
 	"github.com/spf13/viper"
 )
 
-var mailTemplate = template.Must(template.New("mail").Parse(
-	`<table>
+var templateFuncs = template.FuncMap{
+	"emptyString": func(s string) bool {
+		return len(s) == 0
+	},
+}
+
+var mailTemplate = template.Must(template.New("mail").
+	Funcs(templateFuncs).
+	Parse(
+		`<table>
 <tbody>
 <tr><td>
-<a href="{{ .Link }}">{{ .Title }}</a> | {{ .Author }}
+<a href="{{ .Link }}">{{ .Title }}</a>{{ if .Author | emptyString | not }} | {{ .Author }}{{ end }}
 <hr>
 </td></tr>
 <tr><td>
