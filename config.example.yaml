@@ -1,11 +1,36 @@
 paths:
-  cache: "cache.json"
+  # location of the main sqlite db file
+  db: "feeds.db"
 
 daemon:
-  # Delay that daemon should wait between read/write attempts
+  # should run as daemon (required for http server to run)
+  enabled: true
+  # delay that daemon should wait between read/write attempts
   delay: 15
 
+web:
+  # should run built-in http server
+  enabled: true
+  # host to bind to
+  host: 0.0.0.0
+  # port http server should bind to
+  port: 8080
+  # installation location, if you installed via go get it most likely will be
+  # $GOPATH/src/github.com/Gonzih/feeds2imap-go/
+  # static dir refers to development environment
+  installationpath: "."
+  # username used for http basic auth
+  username: user
+  # password used for http basic auth
+  password: pass
+  # pocket button settings
+  pocket:
+    # should pocket button be enabled?
+    enabled: true
+
 imap:
+  # should imap syncronization be enabled
+  enabled: true
   # imap host
   host: imap.gmail.com
   # imap port
@@ -14,10 +39,11 @@ imap:
   username: mymail@gmail.com
   # imap password
   password: mypass
-  # prefix to use when creating imap folders (RSS/myfolder)
-  folder_prefix: RSS
-  # Should folder names be capitalized (by default everything is lowercase)
-  folder_capitalize: true
+  folder:
+    # prefix to use when creating imap folders (RSS/myfolder)
+    prefix: RSS
+    # Should folder names be capitalized (by default everything is lowercase)
+    capitalize: true
   # To field that will be used in email
   to:
     name: My Name

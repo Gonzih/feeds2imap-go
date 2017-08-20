@@ -10,10 +10,13 @@ import (
 
 func init() {
 	pflag.String("config", "config.yaml", "config file path")
-	pflag.Bool("daemon", false, "run forever in a loop")
 
 	pflag.Parse()
 	viper.BindPFlags(pflag.CommandLine)
+
+	viper.SetDefault("web.host", "0.0.0.0")
+	viper.SetDefault("web.port", 8080)
+	viper.SetDefault("web.installationpath", ".")
 
 	viper.SetConfigFile(viper.GetString("config"))
 
@@ -22,27 +25,41 @@ func init() {
 	if err != nil {
 		panic(err)
 	}
+
+	initDB()
+	migrateDB()
 }
 
 func main() {
+	defer closeDB()
+	if viper.GetBool("daemon.enabled") && viper.GetBool("web.enabled") {
+		go StartHTTPD()
+	}
+
 	for {
-		items, cache := FetchNewFeedItems()
+		items := FetchNewFeedItems()
 
 		if len(items) > 0 {
-			err := AppendNewItemsViaIMAP(items)
+			if viper.GetBool("debug") {
+				log.Printf("Found %d new items", len(items))
+			}
+
+			if viper.GetBool("imap.enabled") {
+				err := AppendNewItemsViaIMAP(items)
+
+				if err != nil {
+					log.Fatal(err)
+				}
+			}
+
+			err := CommitToCache(items)
 
 			if err != nil {
 				log.Fatal(err)
 			}
 		}
 
-		err := WriteCacheFile(cache)
-
-		if err != nil {
-			log.Fatal(err)
-		}
-
-		if !viper.GetBool("daemon") {
+		if !viper.GetBool("daemon.enabled") {
 			break
 		} else {
 			t := viper.GetInt("daemon.delay")

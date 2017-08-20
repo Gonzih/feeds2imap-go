@@ -57,15 +57,20 @@ func formatLink(rawLink string) string {
 	return u.String()
 }
 
+func formatAuthor(item *gofeed.Item) string {
+	if item.Author != nil {
+		return fmt.Sprintf("%s %s", item.Author.Name, item.Author.Email)
+	}
+
+	return ""
+}
+
 func formatContent(item *gofeed.Item) (string, error) {
 	var payload templatePayload
 
+	payload.Author = formatAuthor(item)
 	payload.Link = formatLink(item.Link)
 	payload.Title = item.Title
-
-	if item.Author != nil {
-		payload.Author = fmt.Sprintf("%s %s", item.Author.Name, item.Author.Email)
-	}
 
 	if len(item.Content) > 0 {
 		payload.Content = template.HTML(item.Content)
@@ -149,10 +154,6 @@ func newIMAPClient() (*client.Client, error) {
 
 // AppendNewItemsViaIMAP puts items in to corresponding imap folders
 func AppendNewItemsViaIMAP(items ItemsWithFolders) error {
-	if viper.GetBool("debug") {
-		log.Printf("Found %d new items", len(items))
-	}
-
 	client, err := newIMAPClient()
 	if err != nil {
 		return err
@@ -166,10 +167,10 @@ func AppendNewItemsViaIMAP(items ItemsWithFolders) error {
 		}
 
 		folderName := entry.Folder
-		if viper.GetBool("imap.folder_capitalize") {
+		if viper.GetBool("imap.folder.capitalize") {
 			folderName = strings.Title(folderName)
 		}
-		folder := fmt.Sprintf("%s/%s", viper.GetString("imap.folder_prefix"), folderName)
+		folder := fmt.Sprintf("%s/%s", viper.GetString("imap.folder.prefix"), folderName)
 
 		_ = client.Create(folder)
 

@@ -1,0 +1,109 @@
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>My Feeds</title>
+        <link rel="stylesheet" href="/static/shoelace.css">
+        <link rel="stylesheet" href="/static/main.css">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.css">
+        <script src="https://unpkg.com/vue@2.4.2"></script>
+        <script src="https://unpkg.com/vuex@2.3.1"></script>
+    </head>
+    <body>
+        <template id="pocket-button">
+            [[if .PocketEnabled ]]
+            <div>
+                <a data-pocket-label="pocket"
+                   data-pocket-count="none"
+                   v-bind:data-save-url="url"
+                   class="pocket-btn"
+                   data-lang="en"></a>
+            </div>
+            [[end]]
+        </template>
+
+        <template id="folders-template">
+            <div class="col-3 navigation">
+                <button class="hamburger button-lg" v-on:click.prevent="expandHamburger">
+                    <i class="fa fa-bars" aria-hidden="true"></i>
+                </button>
+                <div v-bind:class="{ 'nav-collapsed': !expanded }" class="navigation-container">
+                    <nav class="tabs-nav">
+                        <a v-on:click.prevent="unfocus" v-bind:class="{ active: defaultActive }" href="#">
+                            All
+                        </a>
+                        <a v-on:click.prevent="focus(folder.folder)" v-bind:class="{ active: isActive(folder.folder) }" v-for="folder in folders" href="#">
+                            {{ titleize(folder.folder) }}
+                            <span class="text-bold" v-if="folder.unread > 0">{{ folder.unread }}</span>
+                        </a>
+                    </nav>
+                    <hr/>
+                    <filters-component v-bind:expanded="expanded"></filters-component>
+                    <hr/>
+                </div>
+            </div>
+        </template>
+
+        <template id="filters-template">
+            <div class="options">
+                <div class="switch">
+                    <input type="checkbox" class="switch" id="only-new-switch" v-bind:checked="checked" v-on:change="toggleUnread">
+                    <label for="only-new-switch"></label>
+                    <span class="hide-md">Only new</span>
+                </div>
+                <div>
+                    <button type="button" v-on:click.prevent="markFolderAsRead" v-bind:disabled="!folderSelected">
+                        <i class="fa fa-check"></i>
+                    </button>
+                    <span class="hide-md">Mark folder as read</span>
+                </div>
+            </div>
+        </template>
+
+        <template id="list-template">
+            <div class="reader-content col">
+                <div v-if="loading" class="tabs-pane active centered">
+                    <span class="loader loader-big"></span>
+                </div>
+                <content-component
+                 v-else
+                 v-for="(item, index) in items"
+                 v-bind:item="item"
+                 v-bind:index="index"
+                 v-bind:key="item.uuid">
+                </content-component>
+            </div>
+        </template>
+
+        <template id="content-template">
+            <div class="tabs-pane active item" v-bind:class="{ unread: unread }" v-on:mouseover="markAsRead" v-on:touchstart="markAsRead">
+                <div class="title">
+                    <a v-bind:href="item.link" target="_blank">
+                        <h2>{{ item.title }}</h2>
+                    </a>
+                </div>
+                <div class="author">
+                    <a v-bind:href="item.feedlink" target="_blank">{{ item.feedtitle }}</a>
+                    <span v-if="item.author"> by {{ item.author }}</span>
+                    [[if .PocketEnabled ]]
+                    <pocket-button-component v-bind:url="item.link"></pocket-button-component>
+                    [[end]]
+                </div>
+                <div v-html="item.content">
+                </div>
+            <div>
+        </template>
+
+        <div class="container" id="app">
+            <div class="tabs">
+                <div class="row">
+                    <folders-component></folders-component>
+                    <list-component></list-component>
+                </div>
+            </div>
+        </div>
+
+        <script type="text/javascript">window.PocketEnabled =[[if .PocketEnabled ]] true [[else]] false [[end]]</script>
+        <script src="/static/main.js"></script>
+    </body>
+</html>

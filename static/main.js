@@ -1,0 +1,269 @@
+String.prototype.format = function() {
+    a = this;
+    for (k in arguments) {
+        a = a.replace("{" + k + "}", arguments[k])
+    }
+    return a
+}
+
+function objToQuery( obj ) {
+  return '?'+Object.keys(obj).reduce(function(a,k){a.push(k+'='+encodeURIComponent(obj[k]));return a},[]).join('&')
+}
+
+var pocketStriptID = "pocket-script"
+
+function insertPocketScript() {
+    var id = "pocket-script"
+    if (!document.getElementById(pocketStriptID) && window.PocketEnabled) {
+        console.log("inserting pocket stcript")
+        var script = document.createElement("script");
+        script.id = pocketStriptID;
+        script.src="https://widgets.getpocket.com/v1/j/btn.js?v=1";
+        document.body.appendChild(script)
+    }
+}
+
+function removePockteScript() {
+    var script = document.getElementById(pocketStriptID)
+    if (script) {
+        document.body.removeChild(script);
+    }
+}
+
+function reloadPocketScript() {
+    removePockteScript();
+    insertPocketScript();
+}
+
+const store = new Vuex.Store({
+    state: {
+        items: [],
+        folders: [],
+        loadingMutex: 0,
+        page: 0,
+        filters: {
+            unread: false,
+            folder: false,
+        },
+        hamburgerExpanded: false,
+    },
+    mutations: {
+        items: function(state, items) {
+            state.items = items
+            state.page = 0
+        },
+
+        folders: function(state, folders) {
+            state.folders = folders
+        },
+
+        focusFolder: function(state, folder) {
+            state.filters.folder = folder
+        },
+
+        startLoading: function(state) {
+            state.loadingMutex += 1
+        },
+
+        stopLoading: function(state) {
+            state.loadingMutex -= 1
+        },
+
+        markAsRead: function(state, index) {
+            state.items[index].read = true
+        },
+
+        toggleNewFilter: function(state) {
+            state.filters.unread = !state.filters.unread
+        },
+
+        toggleHamburger: function(state) {
+            state.hamburgerExpanded = !state.hamburgerExpanded
+        },
+
+        closeHamburger: function(state) {
+            state.hamburgerExpanded = false
+        },
+    }
+});
+
+var reloadFeeds = function() {
+    let folder = store.state.filters.folder
+    let showOnlyUnread = store.state.filters.unread
+    let params = {}
+
+    if (folder) {
+        params.folder = folder
+    }
+
+    if (showOnlyUnread) {
+        params.unread = true
+    }
+
+    let url = "/api/feeds{0}".format(objToQuery(params))
+
+    store.commit("startLoading")
+    fetch(url, {
+        credentials: "same-origin"
+    }).then(function(response) {
+        if (response.ok) {
+            return response.json()
+        } else {
+            throw new Error("Erro fetching data")
+        }
+    }).then(function(json) {
+        store.commit("items", json)
+        store.commit("stopLoading")
+    });
+}
+
+var reloadFolders = function() {
+    store.commit("startLoading")
+    fetch("/api/folders", {
+        credentials: "same-origin"
+    }).then(function(response) {
+        if (response.ok) {
+            return response.json()
+        } else {
+            throw new Error("Erro fetching data")
+        }
+    }).then(function(json) {
+        store.commit("folders", json)
+        store.commit("stopLoading")
+    });
+}
+
+reloadFeeds()
+reloadFolders()
+
+var markItemReadInDB = function(uuid, index) {
+    fetch("/api/feeds/" + uuid + "/read", {
+        method: "POST",
+        credentials: "same-origin",
+    }).then(function(response) {
+        if (response.ok) {
+            store.commit("markAsRead", index)
+        } else {
+            console.log(response)
+        }
+    })
+}
+
+var markFolderReadInDB = function() {
+    if (store.state.filters.folder) {
+        fetch("/api/folders/" + store.state.filters.folder + "/read", {
+            method: "POST",
+            credentials: "same-origin",
+        }).then(function(response) {
+            if (response.ok) {
+                reloadFolders()
+                reloadFeeds()
+            } else {
+                console.log(response)
+            }
+        })
+    }
+}
+
+Vue.component('folders-component', {
+    template: '#folders-template',
+    computed: {
+        folders: function() {
+            return store.state.folders
+        },
+        defaultActive: function() {
+            return !store.state.filters.folder
+        },
+        expanded: function() {
+            return store.state.hamburgerExpanded
+        }
+    },
+    methods: {
+        titleize: function(string) {
+            return string.charAt(0).toUpperCase() + string.slice(1);
+        },
+        focus: function(folder) {
+            store.commit("focusFolder", folder)
+            reloadFeeds()
+            reloadFolders()
+            store.commit("closeHamburger")
+        },
+        unfocus: function() {
+            store.commit("focusFolder", false)
+            reloadFeeds()
+            store.commit("closeHamburger")
+        },
+        isActive: function(folder) {
+            return folder == store.state.filters.folder
+        },
+        expandHamburger: function() {
+            store.commit("toggleHamburger")
+        },
+    },
+});
+
+
+Vue.component('filters-component', {
+    template: '#filters-template',
+    computed: {
+        checked: function() {
+            return store.state.filters.unread
+        },
+        folderSelected: function() {
+            return store.state.filters.folder
+        },
+        expanded: function() {
+            return store.state.hamburgerExpanded
+        }
+    },
+    methods: {
+        toggleUnread: function(e) {
+            store.commit("toggleNewFilter")
+            store.commit("toggleHamburger")
+            reloadFeeds()
+        },
+        markFolderAsRead: function(e) {
+            markFolderReadInDB()
+            store.commit("toggleHamburger")
+        }
+    },
+});
+
+Vue.component('list-component', {
+    template: '#list-template',
+    updated: reloadPocketScript,
+    computed: {
+        items: function() {
+            return store.state.items
+        },
+        loading: function() {
+            return store.state.loadingMutex > 0
+        },
+    },
+});
+
+Vue.component('content-component', {
+    template: '#content-template',
+    props: ['item', 'index'],
+    computed: {
+        unread: function() {
+            return !this.item.read
+        }
+    },
+    methods: {
+        markAsRead: function() {
+            if (!this.item.read) {
+                markItemReadInDB(this.item.uuid, this.index)
+            }
+        },
+    },
+});
+
+Vue.component('pocket-button-component', {
+    template: '#pocket-button',
+    props: ['url'],
+});
+
+var vm = new Vue({
+    el: '#app'
+})

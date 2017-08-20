@@ -6,7 +6,9 @@ import (
 	"log"
 	"os"
 	"sync"
+	"time"
 
+	"github.com/google/uuid"
 	"github.com/mmcdole/gofeed"
 	"github.com/spf13/viper"
 )
@@ -31,6 +33,7 @@ type ItemWithFolder struct {
 	Item      *gofeed.Item
 	Folder    string
 	FeedTitle string
+	FeedLink  string
 }
 
 // ItemsWithFolders represents collection of ItemWithFolder
@@ -94,7 +97,7 @@ func flattenFeedData(feeds FeedsWithFolders) (items ItemsWithFolders) {
 	for _, fWithFolder := range feeds {
 		folder := fWithFolder.Folder
 		for _, item := range fWithFolder.Feed.Items {
-			items = append(items, ItemWithFolder{Item: item, Folder: folder, FeedTitle: fWithFolder.Feed.Title})
+			items = append(items, ItemWithFolder{Item: item, Folder: folder, FeedTitle: fWithFolder.Feed.Title, FeedLink: fWithFolder.Feed.Link})
 		}
 	}
 
@@ -130,44 +133,53 @@ func ReadCacheFile() ItemsCache {
 	return cache
 }
 
-// WriteCacheFile dumps content of cache to the fs
-func WriteCacheFile(cache ItemsCache) error {
-	json, err := json.Marshal(&cache)
+// CommitToCache saves item data to db
+func CommitToCache(items ItemsWithFolders) error {
+	for _, item := range items {
+		i := item.Item
 
-	if err != nil {
-		return err
-	}
+		uuid := uuid.New().String()
+		author := formatAuthor(i)
+		link := formatLink(i.Link)
 
-	err = ioutil.WriteFile(viper.GetString("paths.cache"), json, 0644)
+		var content string
+		if len(i.Content) > 0 {
+			content = i.Content
+		} else {
+			content = i.Description
+		}
 
-	if err != nil {
-		return err
+		var published time.Time
+		if i.PublishedParsed != nil {
+			published = *i.PublishedParsed
+		} else {
+			published = time.Now()
+		}
+
+		err := CommitToDB(uuid, i.GUID, i.Title, link, author, item.FeedTitle, item.FeedLink, item.Folder, content, published)
+
+		if err != nil {
+			return err
+		}
 	}
 
 	return nil
 }
 
-func filterNewItems(entries ItemsWithFolders) (newItems ItemsWithFolders, newCache ItemsCache) {
-	cache := ReadCacheFile()
-	newCache = cache
-
-OUTER:
+func filterNewItems(entries ItemsWithFolders) (newItems ItemsWithFolders) {
 	for _, entry := range entries {
-		for _, cacheEntry := range cache {
-			if cacheEntry == entry.Item.GUID {
-				continue OUTER
-			}
+		if IsExistingID(entry.Item.GUID) {
+			continue
 		}
 
 		newItems = append(newItems, entry)
-		newCache = append(newCache, entry.Item.GUID)
 	}
 
 	return
 }
 
 // FetchNewFeedItems loads configuration, fetches rss items and discards ones that are in cache already returning new items and new version of a cache
-func FetchNewFeedItems() (ItemsWithFolders, ItemsCache) {
+func FetchNewFeedItems() ItemsWithFolders {
 	input := readInputURLsFile()
 
 	flat := flattenInputURLs(input)
