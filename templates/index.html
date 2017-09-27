@@ -15,7 +15,7 @@
             <div>
                 <a data-pocket-label="pocket"
                    data-pocket-count="none"
-                   v-bind:data-save-url="url"
+                   :data-save-url="url"
                    class="pocket-btn"
                    data-lang="en"></a>
             </div>
@@ -24,21 +24,21 @@
 
         <template id="folders-template">
             <div class="col-3 navigation">
-                <button class="hamburger button-lg" v-on:click.prevent="expandHamburger">
+                <button class="hamburger button-lg" @click.prevent="expandHamburger">
                     <i class="fa fa-bars" aria-hidden="true"></i>
                 </button>
-                <div v-bind:class="{ 'nav-collapsed': !expanded }" class="navigation-container">
+                <div :class="{ 'nav-collapsed': !expanded }" class="navigation-container">
                     <nav class="tabs-nav">
-                        <a v-on:click.prevent="unfocus" v-bind:class="{ active: defaultActive }" href="#">
+                        <a @click.prevent="unfocus" :class="{ active: defaultActive }" href="#">
                             All
                         </a>
-                        <a v-on:click.prevent="focus(folder.folder)" v-bind:class="{ active: isActive(folder.folder) }" v-for="folder in folders" href="#">
+                        <a @click.prevent="focus(folder.folder)" :class="{ active: isActive(folder.folder) }" v-for="folder in folders" href="#">
                             {{ titleize(folder.folder) }}
                             <span class="text-bold" v-if="folder.unread > 0">{{ folder.unread }}</span>
                         </a>
                     </nav>
                     <hr/>
-                    <filters-component v-bind:expanded="expanded"></filters-component>
+                    <filters-component :expanded="expanded"></filters-component>
                     <hr/>
                 </div>
             </div>
@@ -47,12 +47,12 @@
         <template id="filters-template">
             <div class="options">
                 <div class="switch">
-                    <input type="checkbox" class="switch" id="only-new-switch" v-bind:checked="checked" v-on:change="toggleUnread">
+                    <input type="checkbox" class="switch" id="only-new-switch" :checked="checked" @change="toggleUnread">
                     <label for="only-new-switch"></label>
                     <span class="hide-md">Only new</span>
                 </div>
                 <div>
-                    <button type="button" v-on:click.prevent="markFolderAsRead" v-bind:disabled="!folderSelected">
+                    <button type="button" @click.prevent="markFolderAsRead" :disabled="!folderSelected">
                         <i class="fa fa-check"></i>
                     </button>
                     <span class="hide-md">Mark folder as read</span>
@@ -68,25 +68,25 @@
                 <content-component
                  v-else
                  v-for="(item, index) in items"
-                 v-bind:item="item"
-                 v-bind:index="index"
-                 v-bind:key="item.uuid">
+                 :item="item"
+                 :index="index"
+                 :key="item.uuid">
                 </content-component>
             </div>
         </template>
 
         <template id="content-template">
-            <div class="tabs-pane active item" v-bind:class="{ unread: unread }" v-on:mouseover="markAsRead" v-on:touchstart="markAsRead">
+            <div class="tabs-pane active item" :class="{ unread: unread }" @mouseover="markAsRead" @touchstart="markAsRead">
                 <div class="title">
-                    <a v-bind:href="item.link" target="_blank">
+                    <a :href="item.link" target="_blank">
                         <h2>{{ item.title }}</h2>
                     </a>
                 </div>
                 <div class="author">
-                    <a v-bind:href="item.feedlink" target="_blank">{{ item.feedtitle }}</a>
+                    <a :href="item.feedlink" target="_blank">{{ item.feedtitle }}</a>
                     <span v-if="item.author"> by {{ item.author }}</span>
                     [[if .PocketEnabled ]]
-                    <pocket-button-component v-bind:url="item.link"></pocket-button-component>
+                    <pocket-button-component :url="item.link"></pocket-button-component>
                     [[end]]
                 </div>
                 <div v-html="item.content">
