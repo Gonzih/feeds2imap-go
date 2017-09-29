@@ -107,3 +107,8 @@ body {
   max-width: 99vw !important;
   height: auto !important;
 }
+
+.pocket-btn {
+  margin-top: 10px;
+  max-height: 22px;
+}
