@@ -77,7 +77,7 @@
         </template>
 
         <template id="content-template">
-            <div class="tabs-pane active item" :class="{ unread: unread }">
+            <div class="tabs-pane active item" :class="{ unread: unread }" @mouseover=markAsReadHover>
                 <div class="title">
                     <a :href="item.link" target="_blank">
                         <h2>{{ item.title }}</h2>

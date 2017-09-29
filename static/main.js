@@ -344,6 +344,11 @@ Vue.component('content-component', {
         )
     },
     methods: {
+        markAsReadHover: function() {
+            if (!this.item.read) {
+                markItemReadInDB(this.item.uuid, this.index)
+            }
+        },
         markAsRead: function() {
             if (!this.item.read && (store.state.scrollTop > this.$el.offsetTop)) {
                 markItemReadInDB(this.item.uuid, this.index)
