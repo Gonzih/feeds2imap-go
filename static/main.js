@@ -1,12 +1,12 @@
-function ScrollHandler() {
+function scrollHandler() {
     if (document.documentElement.clientWidth < 768) {
-        progress = 100 * document.body.scrollTop / (document.body.offsetHeight-window.innerHeight)
+        let progress = 100 * document.body.scrollTop / (document.body.offsetHeight-window.innerHeight)
         if (progress > 95) {
             loadExtraPage()
         }
     }
 }
-window.onscroll = ScrollHandler;
+window.onscroll = scrollHandler;
 
 String.prototype.format = function() {
     a = this;
@@ -298,6 +298,7 @@ Vue.component('list-component', {
     methods: {
         scrollHandler: function() {
             let el = this.$el
+            let progress = 100 * el.scrollTop / (el.scrollHeight-el.clientHeight)
             if (progress > 95) {
                 loadExtraPage()
             }

@@ -103,6 +103,6 @@ body {
   }
 }
 
-.reader-content * {
+.reader-content img, .reader-content svg, .reader-content iframe, .reader-content pre {
   max-width: 99%;
 }
