@@ -62,7 +62,7 @@
 
         <template id="list-template">
             <div class="reader-content col"
-                @scroll=scrollHandler>
+                @scroll="scrollHandler">
                 <div v-if="loading" class="tabs-pane active centered">
                     <span class="loader loader-big"></span>
                 </div>
@@ -77,7 +77,7 @@
         </template>
 
         <template id="content-template">
-            <div class="tabs-pane active item" :class="{ unread: unread }" @mouseover="markAsRead" @touchstart="markAsRead">
+            <div class="tabs-pane active item" :class="{ unread: unread }">
                 <div class="title">
                     <a :href="item.link" target="_blank">
                         <h2>{{ item.title }}</h2>

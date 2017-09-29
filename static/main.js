@@ -1,13 +1,3 @@
-function scrollHandler() {
-    if (document.documentElement.clientWidth < 768) {
-        let progress = 100 * document.body.scrollTop / (document.body.offsetHeight-window.innerHeight)
-        if (progress > 95) {
-            loadExtraPage()
-        }
-    }
-}
-window.onscroll = scrollHandler;
-
 String.prototype.format = function() {
     a = this;
     for (k in arguments) {
@@ -47,6 +37,7 @@ function reloadPocketScript() {
 
 const store = new Vuex.Store({
     state: {
+        scrollTop: 0,
         items: [],
         folders: [],
         loadingMutex: 0,
@@ -60,6 +51,10 @@ const store = new Vuex.Store({
         hamburgerExpanded: false,
     },
     mutations: {
+        scroll: function(state, pos) {
+            state.scrollTop = pos
+        },
+
         items: function(state, items) {
             state.items = items
             state.page = 0
@@ -115,6 +110,18 @@ const store = new Vuex.Store({
         },
     }
 });
+
+function scrollHandler() {
+    if (document.documentElement.clientWidth < 768) {
+        let progress = 100 * document.body.scrollTop / (document.body.offsetHeight-window.innerHeight)
+        if (progress > 95) {
+            loadExtraPage()
+        }
+        store.commit('scroll', document.body.scrollTop)
+    }
+}
+window.onscroll = scrollHandler;
+
 
 var reloadFeeds = function() {
     let folder = store.state.filters.folder
@@ -302,6 +309,7 @@ Vue.component('list-component', {
             if (progress > 95) {
                 loadExtraPage()
             }
+            store.commit('scroll', el.scrollTop)
         },
     },
     computed: {
@@ -320,11 +328,24 @@ Vue.component('content-component', {
     computed: {
         unread: function() {
             return !this.item.read
-        }
+        },
+    },
+    created: function() {
+        this.$on('scroll', this.markAsRead)
+
+        let dis = this
+        store.watch(
+            function() {
+                return store.state.scrollTop
+            },
+            function(n) {
+                dis.$emit('scroll')
+            },
+        )
     },
     methods: {
         markAsRead: function() {
-            if (!this.item.read) {
+            if (!this.item.read && (store.state.scrollTop > this.$el.offsetTop)) {
                 markItemReadInDB(this.item.uuid, this.index)
             }
         },
