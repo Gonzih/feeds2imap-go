@@ -21,8 +21,8 @@ web:
   installationpath: "."
   # username used for http basic auth
   username: user
-  # password used for http basic auth
-  password: pass
+  # md5 password hash used for http basic auth
+  password: 1a1dc91c907325c69271ddf0c944bc72
   # pocket button settings
   pocket:
     # should pocket button be enabled?

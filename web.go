@@ -1,6 +1,7 @@
 package main
 
 import (
+	"crypto/md5"
 	"encoding/base64"
 	"encoding/json"
 	"fmt"
@@ -85,7 +86,8 @@ func isAuthenticated(r *http.Request) bool {
 		return false
 	}
 
-	return pair[0] == viper.GetString("web.username") && pair[1] == viper.GetString("web.password")
+	hash := fmt.Sprintf("%x", md5.Sum([]byte(pair[1])))
+	return pair[0] == viper.GetString("web.username") && hash == viper.GetString("web.password")
 }
 
 func AuthenticationRequired(handler func(http.ResponseWriter, *http.Request, httprouter.Params)) func(http.ResponseWriter, *http.Request, httprouter.Params) {
