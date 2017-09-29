@@ -61,7 +61,8 @@
         </template>
 
         <template id="list-template">
-            <div class="reader-content col">
+            <div class="reader-content col"
+                @scroll=scrollHandler>
                 <div v-if="loading" class="tabs-pane active centered">
                     <span class="loader loader-big"></span>
                 </div>

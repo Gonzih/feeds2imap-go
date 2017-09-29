@@ -7,6 +7,7 @@ import (
 	"html/template"
 	"log"
 	"net/http"
+	"strconv"
 	"strings"
 	"time"
 
@@ -180,6 +181,12 @@ func FeedsHandler(w http.ResponseWriter, r *http.Request, ps httprouter.Params) 
 
 	folder := r.FormValue("folder")
 	unread := r.FormValue("unread") == "true"
+	page, err := strconv.Atoi(r.FormValue("page"))
+
+	if err != nil {
+		log.Printf("Error parsing page argument: %s", err)
+		page = 0
+	}
 
 	if len(folder) > 0 {
 		whereFilters = append(whereFilters, "folder=?")
@@ -194,7 +201,12 @@ func FeedsHandler(w http.ResponseWriter, r *http.Request, ps httprouter.Params) 
 		whereString = fmt.Sprintf("WHERE %s", strings.Join(whereFilters, " AND "))
 	}
 
-	query := fmt.Sprintf("SELECT * FROM feeds %s ORDER BY published_at DESC LIMIT 20;", whereString)
+	ppage := 20
+	offset := page * ppage
+
+	args = append(args, ppage, offset)
+
+	query := fmt.Sprintf("SELECT * FROM feeds %s ORDER BY published_at DESC LIMIT ? OFFSET ?;", whereString)
 
 	rows, err := db.Query(query, args...)
 	if err != nil {

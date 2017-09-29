@@ -1,3 +1,13 @@
+function ScrollHandler() {
+    if (document.documentElement.clientWidth < 768) {
+        progress = 100 * document.body.scrollTop / (document.body.offsetHeight-window.innerHeight)
+        if (progress > 95) {
+            loadExtraPage()
+        }
+    }
+}
+window.onscroll = ScrollHandler;
+
 String.prototype.format = function() {
     a = this;
     for (k in arguments) {
@@ -41,6 +51,8 @@ const store = new Vuex.Store({
         folders: [],
         loadingMutex: 0,
         page: 0,
+        pageMutex: 0,
+        lastPage: false,
         filters: {
             unread: false,
             folder: false,
@@ -51,6 +63,14 @@ const store = new Vuex.Store({
         items: function(state, items) {
             state.items = items
             state.page = 0
+        },
+
+        appendPageItems: function(state, items) {
+            if (Array.isArray(items) && items.length > 0) {
+                state.items = state.items.concat(items)
+            } else {
+                state.lastPage = true
+            }
         },
 
         folders: function(state, folders) {
@@ -67,6 +87,15 @@ const store = new Vuex.Store({
 
         stopLoading: function(state) {
             state.loadingMutex -= 1
+        },
+
+        lockPage: function(state) {
+            state.pageMutex += 1
+            state.page += 1
+        },
+
+        unlockPage: function(state) {
+            state.pageMutex -= 0
         },
 
         markAsRead: function(state, index) {
@@ -115,6 +144,40 @@ var reloadFeeds = function() {
         store.commit("items", json)
         store.commit("stopLoading")
     });
+}
+
+var loadExtraPage = function() {
+    if (!store.state.lastPage) {
+        store.commit("lockPage")
+
+        let folder = store.state.filters.folder
+        let showOnlyUnread = store.state.filters.unread
+        let page = store.state.page
+        let params = {page: page}
+
+        if (folder) {
+            params.folder = folder
+        }
+
+        if (showOnlyUnread) {
+            params.unread = true
+        }
+
+        let url = "/api/feeds{0}".format(objToQuery(params))
+
+        fetch(url, {
+            credentials: "same-origin"
+        }).then(function(response) {
+            if (response.ok) {
+                return response.json()
+            } else {
+                throw new Error("Erro fetching data")
+            }
+        }).then(function(json) {
+            store.commit("appendPageItems", json)
+            store.commit("unlockPage")
+        });
+    }
 }
 
 var reloadFolders = function() {
@@ -232,6 +295,14 @@ Vue.component('filters-component', {
 Vue.component('list-component', {
     template: '#list-template',
     updated: reloadPocketScript,
+    methods: {
+        scrollHandler: function() {
+            let el = this.$el
+            if (progress > 95) {
+                loadExtraPage()
+            }
+        },
+    },
     computed: {
         items: function() {
             return store.state.items
