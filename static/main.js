@@ -126,7 +126,7 @@ window.onscroll = scrollHandler;
 var reloadFeeds = function() {
     let folder = store.state.filters.folder
     let showOnlyUnread = store.state.filters.unread
-    let params = {}
+    let params = {page: 0}
 
     if (folder) {
         params.folder = folder
