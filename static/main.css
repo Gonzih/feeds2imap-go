@@ -104,5 +104,6 @@ body {
 }
 
 .reader-content img, .reader-content svg, .reader-content iframe, .reader-content pre {
-  max-width: 99%;
+  max-width: 99vh !important;
+  height: auto !important;
 }
