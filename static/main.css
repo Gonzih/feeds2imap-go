@@ -103,7 +103,7 @@ body {
   }
 }
 
-.reader-content img, .reader-content svg, .reader-content iframe, .reader-content pre {
+.reader-content img, .reader-content svg, .reader-content iframe, .reader-content pre, .reader-content table {
   max-width: 99vw !important;
   height: auto !important;
 }
