@@ -10,31 +10,6 @@ function objToQuery( obj ) {
   return '?'+Object.keys(obj).reduce(function(a,k){a.push(k+'='+encodeURIComponent(obj[k]));return a},[]).join('&')
 }
 
-var pocketStriptID = "pocket-script"
-
-function insertPocketScript() {
-    var id = "pocket-script"
-    if (!document.getElementById(pocketStriptID) && window.PocketEnabled) {
-        console.log("inserting pocket stcript")
-        var script = document.createElement("script");
-        script.id = pocketStriptID;
-        script.src="https://widgets.getpocket.com/v1/j/btn.js?v=1";
-        document.body.appendChild(script)
-    }
-}
-
-function removePockteScript() {
-    var script = document.getElementById(pocketStriptID)
-    if (script) {
-        document.body.removeChild(script);
-    }
-}
-
-function reloadPocketScript() {
-    removePockteScript();
-    insertPocketScript();
-}
-
 const store = new Vuex.Store({
     state: {
         scrollTop: 0,
@@ -301,7 +276,6 @@ Vue.component('filters-component', {
 
 Vue.component('list-component', {
     template: '#list-template',
-    updated: reloadPocketScript,
     methods: {
         scrollHandler: function() {
             let el = this.$el
@@ -360,6 +334,12 @@ Vue.component('content-component', {
 Vue.component('pocket-button-component', {
     template: '#pocket-button',
     props: ['url'],
+    computed: {
+        pocketUrl: function() {
+            let escapedUrl = encodeURIComponent(this.url)
+            return `https://getpocket.com/save?url=${ escapedUrl }`
+        }
+    }
 });
 
 var vm = new Vue({

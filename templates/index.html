@@ -13,11 +13,11 @@
         <template id="pocket-button">
             [[if .PocketEnabled ]]
             <div>
-                <a data-pocket-label="pocket"
-                   data-pocket-count="none"
-                   :data-save-url="url"
-                   class="pocket-btn"
-                   data-lang="en"></a>
+                <a :href="pocketUrl" target=_blank>
+                    <button class="button">
+                    <i class="fa fa-get-pocket" aria-hidden="true"></i>
+                    </button>
+                </a>
             </div>
             [[end]]
         </template>
@@ -82,13 +82,13 @@
                     <a :href="item.link" target="_blank">
                         <h2>{{ item.title }}</h2>
                     </a>
+                    [[if .PocketEnabled ]]
+                    <pocket-button-component :url="item.link"></pocket-button-component>
+                    [[end]]
                 </div>
                 <div class="author">
                     <a :href="item.feedlink" target="_blank">{{ item.feedtitle }}</a>
                     <span v-if="item.author"> by {{ item.author }}</span>
-                    [[if .PocketEnabled ]]
-                    <pocket-button-component :url="item.link"></pocket-button-component>
-                    [[end]]
                 </div>
                 <div v-html="item.content">
                 </div>
@@ -104,7 +104,6 @@
             </div>
         </div>
 
-        <script type="text/javascript">window.PocketEnabled =[[if .PocketEnabled ]] true [[else]] false [[end]]</script>
         <script src="/static/main.js"></script>
     </body>
 </html>
