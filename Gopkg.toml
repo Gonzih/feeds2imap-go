@@ -30,9 +30,11 @@
   name = "github.com/emersion/go-message"
 
 [[constraint]]
+  branch = "master"
   name = "github.com/google/uuid"
 
 [[constraint]]
+  branch = "master"
   name = "github.com/icza/session"
 
 [[constraint]]
@@ -48,7 +50,9 @@
   name = "github.com/mmcdole/gofeed"
 
 [[constraint]]
+  branch = "master"
   name = "github.com/spf13/pflag"
 
 [[constraint]]
+  branch = "master"
   name = "github.com/spf13/viper"
