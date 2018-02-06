@@ -11,7 +11,7 @@ import (
 
 var db *sql.DB
 
-func initDB() {
+func InitDB() {
 	var err error
 	db, err = sql.Open("sqlite3", viper.GetString("paths.db"))
 
@@ -20,7 +20,7 @@ func initDB() {
 	}
 }
 
-func migrateDB() {
+func MigrateDB() {
 	sqlStmt := `
 	CREATE TABLE IF NOT EXISTS feeds (uuid STRING NOT NULL PRIMARY KEY, guid STRING, title STRING, link STRING, author STRING, feedtitle STRING, feedlink STRING, folder STRING, content TEXT, published_at TIMESTAMP, read BOOL);
 	CREATE INDEX IF NOT EXISTS guid_index ON feeds (guid);
@@ -35,7 +35,7 @@ func migrateDB() {
 	}
 }
 
-func closeDB() {
+func CloseDB() {
 	if db != nil {
 		db.Close()
 	}

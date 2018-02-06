@@ -27,12 +27,12 @@ func init() {
 		panic(err)
 	}
 
-	feeds2imap.initDB()
-	feeds2imap.migrateDB()
+	feeds2imap.InitDB()
+	feeds2imap.MigrateDB()
 }
 
 func main() {
-	defer feeds2imap.closeDB()
+	defer feeds2imap.CloseDB()
 	if viper.GetBool("daemon.enabled") && viper.GetBool("web.enabled") {
 		go feeds2imap.StartHTTPD()
 	}
