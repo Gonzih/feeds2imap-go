@@ -4,7 +4,7 @@ import (
 	"log"
 	"time"
 
-	feeds2imap "github.com/Gonzih/feeds2imap-go/lib"
+	"github.com/Gonzih/feeds2imap-go/lib"
 	"github.com/spf13/pflag"
 	"github.com/spf13/viper"
 )
