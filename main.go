@@ -26,18 +26,18 @@ func init() {
 		panic(err)
 	}
 
-	initDB()
-	migrateDB()
+	feeds2imap.initDB()
+	feeds2imap.migrateDB()
 }
 
 func main() {
-	defer closeDB()
+	defer feeds2imap.closeDB()
 	if viper.GetBool("daemon.enabled") && viper.GetBool("web.enabled") {
-		go StartHTTPD()
+		go feeds2imap.StartHTTPD()
 	}
 
 	for {
-		items := FetchNewFeedItems()
+		items := feeds2imap.FetchNewFeedItems()
 
 		if len(items) > 0 {
 			if viper.GetBool("debug") {
@@ -45,14 +45,14 @@ func main() {
 			}
 
 			if viper.GetBool("imap.enabled") {
-				err := AppendNewItemsViaIMAP(items)
+				err := feeds2imap.AppendNewItemsViaIMAP(items)
 
 				if err != nil {
 					log.Fatal(err)
 				}
 			}
 
-			err := CommitToCache(items)
+			err := feeds2imap.CommitToCache(items)
 
 			if err != nil {
 				log.Fatal(err)

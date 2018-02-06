@@ -1,4 +1,4 @@
-package main
+package feeds2imap
 
 import (
 	"crypto/md5"
