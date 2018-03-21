@@ -5,7 +5,7 @@
   branch = "master"
   name = "github.com/Gonzih/feeds2imap-go"
   packages = ["lib"]
-  revision = "a27a673ef45c09b89f065d46d65b179859423414"
+  revision = "5882791917542a04e970bb06dd5bee1eed47c07d"
 
 [[projects]]
   name = "github.com/PuerkitoBio/goquery"
