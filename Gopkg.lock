@@ -5,18 +5,19 @@
   branch = "master"
   name = "github.com/Gonzih/feeds2imap-go"
   packages = ["lib"]
-  revision = "cc7852c90b8d43831d6bab5d316bc8b75c5864d7"
+  revision = "a27a673ef45c09b89f065d46d65b179859423414"
 
 [[projects]]
   name = "github.com/PuerkitoBio/goquery"
   packages = ["."]
-  revision = "8806ada2a4ab225c06e9106f9631be80932db7ce"
+  revision = "09540e565986583836b5fc792fe951ec5fd201dd"
+  version = "v1.3.0"
 
 [[projects]]
-  branch = "master"
   name = "github.com/andybalholm/cascadia"
   packages = ["."]
-  revision = "349dd0209470eabd9514242c688c403c0926d266"
+  revision = "901648c87902174f774fac311d7f176f8647bdaa"
+  version = "v1.0.0"
 
 [[projects]]
   branch = "v1"
@@ -28,7 +29,7 @@
     "responses",
     "utf7"
   ]
-  revision = "9e7e4429063c1a251cf96bb3306129d2af1e6d4a"
+  revision = "b63c7c7011cba491f40dcc43026cc30e2fbdf337"
 
 [[projects]]
   branch = "master"
@@ -38,7 +39,7 @@
     "charset",
     "mail"
   ]
-  revision = "901dbfdd5a446027b95ca83bba1561227ef4541d"
+  revision = "9b004c277ed8c09571f2990f8c58f3c54f0846f2"
 
 [[projects]]
   branch = "master"
@@ -53,23 +54,25 @@
   revision = "d0e65e56babe3f687ff94c1d764ca0e6aa7723ee"
 
 [[projects]]
-  branch = "master"
   name = "github.com/fsnotify/fsnotify"
   packages = ["."]
-  revision = "4da3e2cfbabc9f751898f250b49f2439785783a1"
+  revision = "c2828203cd70a50dcccfb2761f8b1f8ceef9a8e9"
+  version = "v1.4.7"
 
 [[projects]]
   name = "github.com/golang/protobuf"
   packages = ["proto"]
-  revision = "17ce1425424ab154092bbb43af630bd647f3bb0d"
+  revision = "925541529c1fa6821df4e44ce2723319eb2be768"
+  version = "v1.0.0"
 
 [[projects]]
   branch = "master"
   name = "github.com/google/uuid"
   packages = ["."]
-  revision = "7e072fc3a7be179aee6d3359e46015aa8c995314"
+  revision = "dec09d789f3dba190787f8b4454c7d3c936fed9e"
 
 [[projects]]
+  branch = "master"
   name = "github.com/hashicorp/hcl"
   packages = [
     ".",
@@ -83,7 +86,7 @@
     "json/scanner",
     "json/token"
   ]
-  revision = "392dba7d905ed5d04a5794ba89f558b27e2ba1ca"
+  revision = "f40e974e75af4e271d97ce0fc917af5898ae7bda"
 
 [[projects]]
   branch = "master"
@@ -95,25 +98,25 @@
   branch = "master"
   name = "github.com/julienschmidt/httprouter"
   packages = ["."]
-  revision = "975b5c4c7c21c0e3d2764200bf2aa8e34657ae6e"
+  revision = "d1898390779332322e6b5ca5011da4bf249bb056"
 
 [[projects]]
   name = "github.com/magiconair/properties"
   packages = ["."]
-  revision = "be5ece7dd465ab0765a9682137865547526d1dfb"
-  version = "v1.7.3"
+  revision = "c3beff4c2358b44d0493c7dda585e7db7ff28ae6"
+  version = "v1.7.6"
 
 [[projects]]
   branch = "master"
   name = "github.com/mattn/go-sqlite3"
   packages = ["."]
-  revision = "05548ff55570cdb9ac72ff4a25a3b5e77a6fb7e5"
+  revision = "9101028e5ca824d2baf0fbd91b9700e2669a6cd9"
 
 [[projects]]
   branch = "master"
   name = "github.com/mitchellh/mapstructure"
   packages = ["."]
-  revision = "d0303fe809921458f417bcf828397a65db30a7e4"
+  revision = "00c29f56e2386353d58c599509e8dc3801b0d716"
 
 [[projects]]
   branch = "master"
@@ -125,7 +128,7 @@
     "internal/shared",
     "rss"
   ]
-  revision = "6ccd8620e1110c07992bb4d80c11e9bb57670fed"
+  revision = "0a05f076cc7ae8b762c04ad09565f029364545ce"
 
 [[projects]]
   branch = "master"
@@ -136,7 +139,8 @@
 [[projects]]
   name = "github.com/pelletier/go-toml"
   packages = ["."]
-  revision = "4692b8f9babfc93db58cc592ba2689d8736781de"
+  revision = "acdc4509485b587f5e675510c4f2c63e90ff68a8"
+  version = "v1.1.0"
 
 [[projects]]
   name = "github.com/spf13/afero"
@@ -144,32 +148,35 @@
     ".",
     "mem"
   ]
-  revision = "9be650865eab0c12963d8753212f4f9c66cdcf12"
+  revision = "bb8f1927f2a9d3ab41c9340aa034f6b803f4359c"
+  version = "v1.0.2"
 
 [[projects]]
   name = "github.com/spf13/cast"
   packages = ["."]
-  revision = "acbeb36b902d72a7a4c18e8f3241075e7ab763e4"
-  version = "v1.1.0"
+  revision = "8965335b8c7107321228e3e3702cab9832751bac"
+  version = "v1.2.0"
 
 [[projects]]
+  branch = "master"
   name = "github.com/spf13/jwalterweatherman"
   packages = ["."]
-  revision = "0efa5202c04663c757d84f90f5219c1250baf94f"
+  revision = "7c0cea34c8ece3fbeb2b27ab9b59511d360fb394"
 
 [[projects]]
   branch = "master"
   name = "github.com/spf13/pflag"
   packages = ["."]
-  revision = "4c012f6dcd9546820e378d0bdda4d8fc772cdfea"
+  revision = "ee5fd03fd6acfd43e44aea0b4135958546ed8e73"
+
+[[projects]]
+  name = "github.com/spf13/viper"
+  packages = ["."]
+  revision = "b5e8006cbee93ec955a89ab31e0e3ce3204f3736"
+  version = "v1.0.2"
 
 [[projects]]
   branch = "master"
-  name = "github.com/spf13/viper"
-  packages = ["."]
-  revision = "aafc9e6bc7b7bb53ddaa75a5ef49a17d6e654be5"
-
-[[projects]]
   name = "golang.org/x/net"
   packages = [
     "context",
@@ -177,12 +184,13 @@
     "html/atom",
     "html/charset"
   ]
-  revision = "f5079bd7f6f74e23c4d65efa0f4ce14cbd6a3c0f"
+  revision = "6078986fec03a1dcc236c34816c71b0e05018fda"
 
 [[projects]]
+  branch = "master"
   name = "golang.org/x/sys"
   packages = ["unix"]
-  revision = "43e60d72a8e2bd92ee98319ba9a384a0e9837c08"
+  revision = "bb729a57828d76e3050e664d86aa052741ab620f"
 
 [[projects]]
   name = "golang.org/x/text"
@@ -208,7 +216,8 @@
     "unicode/cldr",
     "unicode/norm"
   ]
-  revision = "767daa157b4d460bba02409ff856ddeeb8e76ab7"
+  revision = "f21a4dfb5e38f5895301dc265a8def02365cc3d0"
+  version = "v0.3.0"
 
 [[projects]]
   name = "google.golang.org/appengine"
@@ -232,7 +241,8 @@
 [[projects]]
   name = "gopkg.in/yaml.v2"
   packages = ["."]
-  revision = "a3f3340b5840cee44f372bddb5880fcbc419b46a"
+  revision = "7f97868eec74b32b0982dd158a51a446d1da7eb5"
+  version = "v2.1.1"
 
 [solve-meta]
   analyzer-name = "dep"
