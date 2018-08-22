@@ -1,3 +1,3 @@
 default:
-	go build .
-	go test
+	vgo build
+	vgo test
