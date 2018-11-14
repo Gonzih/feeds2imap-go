@@ -2,6 +2,7 @@ package main
 
 import (
 	"log"
+	"os"
 	"time"
 
 	"github.com/Gonzih/feeds2imap-go/lib"
@@ -10,7 +11,7 @@ import (
 )
 
 func init() {
-	pflag.String("config", "config.yaml", "config file path")
+	pflag.String("config", os.Getenv("HOME")+"/.config/feeds2imap.config.yaml", "config file path")
 
 	pflag.Parse()
 	viper.BindPFlags(pflag.CommandLine)
