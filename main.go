@@ -5,7 +5,7 @@ import (
 	"os"
 	"time"
 
-	"github.com/Gonzih/feeds2imap-go/lib"
+	"github.com/snipem/feeds2imap-go/lib"
 	"github.com/spf13/pflag"
 	"github.com/spf13/viper"
 )
@@ -47,18 +47,25 @@ func main() {
 			}
 
 			if viper.GetBool("imap.enabled") {
-				err := feeds2imap.AppendNewItemsViaIMAP(items)
+				addedItems, err := feeds2imap.AppendNewItemsViaIMAP(items)
 
+				if err != nil {
+					log.Fatal(err)
+				}
+				// Only cache those items which have been added
+				err = feeds2imap.CommitToCache(addedItems)
+
+				if err != nil {
+					log.Fatal(err)
+				}
+			} else {
+				// TODO make this prettier
+				err := feeds2imap.CommitToCache(items)
 				if err != nil {
 					log.Fatal(err)
 				}
 			}
 
-			err := feeds2imap.CommitToCache(items)
-
-			if err != nil {
-				log.Fatal(err)
-			}
 		}
 
 		if !viper.GetBool("daemon.enabled") {

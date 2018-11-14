@@ -153,12 +153,14 @@ func newIMAPClient() (*client.Client, error) {
 }
 
 // AppendNewItemsViaIMAP puts items in to corresponding imap folders
-func AppendNewItemsViaIMAP(items ItemsWithFolders) error {
+func AppendNewItemsViaIMAP(items ItemsWithFolders) (ItemsWithFolders, error) {
 	client, err := newIMAPClient()
 	if err != nil {
-		return err
+		return nil, err
 	}
 	defer client.Logout()
+
+	var i []ItemWithFolder
 
 	for _, entry := range items {
 		if entry.Item.PublishedParsed == nil {
@@ -176,7 +178,7 @@ func AppendNewItemsViaIMAP(items ItemsWithFolders) error {
 
 		msg, err := newMessage(entry.Item, entry.FeedTitle)
 		if err != nil {
-			return err
+			return nil, err
 		}
 
 		if viper.GetBool("debug") {
@@ -185,10 +187,12 @@ func AppendNewItemsViaIMAP(items ItemsWithFolders) error {
 
 		literal := bytes.NewReader(msg.Bytes())
 		err = client.Append(folder, []string{}, *entry.Item.PublishedParsed, literal)
-		if err != nil {
-			return err
+		if err == nil {
+			// TODO intercept error
+			i = append(i, entry)
 		}
+
 	}
 
-	return nil
+	return i, nil
 }
