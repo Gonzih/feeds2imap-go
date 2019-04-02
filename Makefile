@@ -1,3 +1,3 @@
 default:
-	vgo build
-	vgo test
+	go build
+	go test -v --cover
