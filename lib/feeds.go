@@ -77,7 +77,7 @@ func fetchFeedData(urls FlatURLs) (FeedsWithFolders, error) {
 			feed, err := fp.ParseURL(url)
 
 			if err != nil {
-				log.Printf("Error while fetching %s: %s", url, err)
+				log.Printf(`Error while fetching %s "%s"`, url, err)
 				return
 			}
 
