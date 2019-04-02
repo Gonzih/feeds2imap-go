@@ -4,5 +4,4 @@ go:
   - 1.x
 
 install:
-  - go get -u golang.org/x/vgo
-  - vgo build
+  - go build
