@@ -142,13 +142,6 @@ func CommitToCache(items ItemsWithFolders) error {
 		author := formatAuthor(i)
 		link := formatLink(i.Link)
 
-		var content string
-		if len(i.Content) > 0 {
-			content = i.Content
-		} else {
-			content = i.Description
-		}
-
 		var published time.Time
 		if i.PublishedParsed != nil {
 			published = *i.PublishedParsed
@@ -156,7 +149,17 @@ func CommitToCache(items ItemsWithFolders) error {
 			published = time.Now()
 		}
 
-		err := CommitToDB(uuid, i.GUID, i.Title, link, author, item.FeedTitle, item.FeedLink, item.Folder, content, published)
+		dbItem := &dbFeedItem{}
+		dbItem.UUID = uuid
+		dbItem.GUID = i.GUID
+		dbItem.Title = i.Title
+		dbItem.Link = link
+		dbItem.Author = author
+		dbItem.FeedTitle = item.FeedTitle
+		dbItem.FeedLink = item.FeedLink
+		dbItem.Folder = item.Folder
+		dbItem.Published = published
+		err := CommitToDB(dbItem)
 
 		if err != nil {
 			return err
