@@ -51,7 +51,7 @@ func CloseDB() {
 	}
 }
 
-// IsExistingID tries to find maching id in db
+// IsExistingID tries to find matching id in db
 func IsExistingID(guid string) bool {
 	var count int
 	err := db.QueryRow("SELECT COUNT(*) FROM feeds WHERE guid=?;", guid).Scan(&count)

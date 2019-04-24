@@ -129,6 +129,9 @@ func ReadCacheFile() ItemsCache {
 	}
 
 	err = json.Unmarshal(bytes, &cache)
+	if err != nil {
+		log.Fatalf("Could not parse cache: %s", err)
+	}
 
 	return cache
 }
