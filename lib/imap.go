@@ -98,8 +98,18 @@ func newMessage(item *gofeed.Item, feedTitle string) (bytes.Buffer, error) {
 		fromName = viper.GetString("imap.from.name")
 	}
 
-	from := []*mail.Address{{fromName, viper.GetString("imap.from.email")}}
-	to := []*mail.Address{{viper.GetString("imap.to.name"), viper.GetString("imap.to.email")}}
+	from := []*mail.Address{
+		{
+			Name:    fromName,
+			Address: viper.GetString("imap.from.email"),
+		},
+	}
+	to := []*mail.Address{
+		{
+			Name:    viper.GetString("imap.to.name"),
+			Address: viper.GetString("imap.to.email"),
+		},
+	}
 
 	mediaParams := map[string]string{"charset": "utf-8"}
 
