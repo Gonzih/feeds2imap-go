@@ -8,26 +8,6 @@ daemon:
   # delay that daemon should wait between read/write attempts
   delay: 15
 
-web:
-  # should run built-in http server
-  enabled: true
-  # host to bind to
-  host: 0.0.0.0
-  # port http server should bind to
-  port: 8080
-  # installation location, if you installed via go get it most likely will be
-  # $GOPATH/src/github.com/Gonzih/feeds2imap-go/
-  # static dir refers to development environment
-  installationpath: "."
-  # username used for http basic auth
-  username: user
-  # md5 password hash used for http basic auth
-  password: 1a1dc91c907325c69271ddf0c944bc72
-  # pocket button settings
-  pocket:
-    # should pocket button be enabled?
-    enabled: true
-
 imap:
   # should imap syncronization be enabled
   enabled: true

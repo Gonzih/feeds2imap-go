@@ -28,7 +28,7 @@ type FeedWithFolder struct {
 // FeedsWithFolders represents collection of FeedWithFolder
 type FeedsWithFolders []FeedWithFolder
 
-// ItemsWithFolders represents rss item (post), folder and original feed title cobined
+// ItemWithFolder represents rss item (post), folder and original feed title cobined
 type ItemWithFolder struct {
 	Item      *gofeed.Item
 	Folder    string
