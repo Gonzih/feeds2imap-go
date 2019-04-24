@@ -89,16 +89,3 @@ func ScanRowToItem(rows *sql.Rows) (i dbFeedItem, err error) {
 
 	return i, err
 }
-
-// MarkAsReadInDB sets read field to true on the given id
-func MarkAsReadInDBByID(uuid string) error {
-	_, err := db.Exec("UPDATE feeds SET read = 1 WHERE uuid = ?;", uuid)
-
-	return err
-}
-
-func MarkAsReadInDBByFolder(folder string) error {
-	_, err := db.Exec("UPDATE feeds SET read = 1 WHERE folder = ?;", folder)
-
-	return err
-}
