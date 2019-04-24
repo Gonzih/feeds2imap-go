@@ -24,6 +24,7 @@ type dbFeedItem struct {
 
 var db *sqlx.DB
 
+// InitDB will init sqlx sqlite3 db
 func InitDB() {
 	var err error
 	db, err = sqlx.Open("sqlite3", viper.GetString("paths.db"))
@@ -43,6 +44,7 @@ func MigrateDB() {
 	db.MustExec(sqlStmt)
 }
 
+// CloseDB will close sqlx db
 func CloseDB() {
 	if db != nil {
 		db.Close()
