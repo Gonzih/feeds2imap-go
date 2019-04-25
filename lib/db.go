@@ -54,10 +54,10 @@ func CloseDB() {
 // IsExistingID tries to find matching id in db
 func IsExistingID(guid string) bool {
 	var count int
-	err := db.QueryRow("SELECT COUNT(*) FROM feeds WHERE guid=?;", guid).Scan(&count)
+	err := db.Get(&count, "SELECT COUNT(*) FROM feeds WHERE guid=?;", guid)
 
 	if err != nil {
-		log.Printf("Error scanning row: %s", err)
+		log.Printf("Error getting count: %s", err)
 		return false
 	}
 

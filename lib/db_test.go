@@ -53,4 +53,5 @@ func TestCommitAndIsExistingIDToDB(t *testing.T) {
 	err := CommitToDB(i)
 	require.Nil(t, err)
 	require.True(t, IsExistingID(i.GUID))
+	require.False(t, IsExistingID("random-string"))
 }

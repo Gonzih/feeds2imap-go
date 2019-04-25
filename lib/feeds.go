@@ -1,10 +1,7 @@
 package feeds2imap
 
 import (
-	"encoding/json"
-	"io/ioutil"
 	"log"
-	"os"
 	"sync"
 	"time"
 
@@ -102,38 +99,6 @@ func flattenFeedData(feeds FeedsWithFolders) (items ItemsWithFolders) {
 	}
 
 	return
-}
-
-// ReadCacheFile reads cache file from fs
-func ReadCacheFile() ItemsCache {
-	var cache ItemsCache
-
-	fname := viper.GetString("paths.cache")
-
-	if _, err := os.Stat(fname); os.IsNotExist(err) {
-		return cache
-	}
-
-	f, err := os.Open(fname)
-
-	if err != nil {
-		log.Println(err)
-		return cache
-	}
-
-	bytes, err := ioutil.ReadAll(f)
-
-	if err != nil {
-		log.Println(err)
-		return cache
-	}
-
-	err = json.Unmarshal(bytes, &cache)
-	if err != nil {
-		log.Fatalf("Could not parse cache: %s", err)
-	}
-
-	return cache
 }
 
 // CommitToCache saves item data to db
