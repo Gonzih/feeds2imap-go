@@ -10,11 +10,18 @@ import (
 	"strings"
 	"time"
 
+	"github.com/emersion/go-imap"
 	"github.com/emersion/go-imap/client"
 	"github.com/emersion/go-message/mail"
 	"github.com/mmcdole/gofeed"
 	"github.com/spf13/viper"
 )
+
+type imapClient interface {
+	Logout() error
+	Create(string) error
+	Append(string, []string, time.Time, imap.Literal) error
+}
 
 var templateFuncs = template.FuncMap{
 	"emptyString": func(s string) bool {
@@ -162,14 +169,7 @@ func newIMAPClient() (*client.Client, error) {
 	return c, nil
 }
 
-// AppendNewItemsViaIMAP puts items in to corresponding imap folders
-func AppendNewItemsViaIMAP(items ItemsWithFolders) error {
-	client, err := newIMAPClient()
-	if err != nil {
-		return err
-	}
-	defer client.Logout()
-
+func appendNewItemsVia(items ItemsWithFolders, client imapClient) error {
 	for _, entry := range items {
 		if entry.Item.PublishedParsed == nil {
 			t := time.Now()
@@ -201,4 +201,15 @@ func AppendNewItemsViaIMAP(items ItemsWithFolders) error {
 	}
 
 	return nil
+}
+
+// AppendNewItemsViaIMAP puts items in to corresponding imap folders
+func AppendNewItemsViaIMAP(items ItemsWithFolders) error {
+	client, err := newIMAPClient()
+	if err != nil {
+		return err
+	}
+	defer client.Logout()
+
+	return appendNewItemsVia(items, client)
 }

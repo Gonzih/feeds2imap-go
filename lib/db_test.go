@@ -13,6 +13,7 @@ func initViper() {
 	viper.SetDefault("urls", map[string]string{
 		"go": "https://blog.golang.org/feed.atom",
 	})
+	viper.SetDefault("imap.folder.prefix", "TEST-RSS")
 }
 
 func testInit() {
