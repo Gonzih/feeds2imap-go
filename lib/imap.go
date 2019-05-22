@@ -120,7 +120,7 @@ func newMessage(item *gofeed.Item, feedTitle string) (bytes.Buffer, error) {
 
 	mediaParams := map[string]string{"charset": "utf-8"}
 
-	h := mail.NewHeader()
+	var h mail.Header
 	h.SetContentType("multipart/alternative", mediaParams)
 	h.SetDate(*item.PublishedParsed)
 	h.SetAddressList("From", from)
@@ -133,9 +133,9 @@ func newMessage(item *gofeed.Item, feedTitle string) (bytes.Buffer, error) {
 		return b, err
 	}
 
-	htmlHeader := mail.NewTextHeader()
+	var htmlHeader mail.InlineHeader
 	htmlHeader.SetContentType("text/html", mediaParams)
-	htmlWriter, err := messageWriter.CreateSingleText(htmlHeader)
+	htmlWriter, err := messageWriter.CreateSingleInline(htmlHeader)
 	defer htmlWriter.Close()
 	if err != nil {
 		return b, err
