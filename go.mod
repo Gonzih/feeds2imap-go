@@ -4,7 +4,7 @@ go 1.12
 
 require (
 	github.com/PuerkitoBio/goquery v1.5.0 // indirect
-	github.com/emersion/go-imap v1.0.0-rc.2
+	github.com/emersion/go-imap v1.0.0
 	github.com/emersion/go-message v0.10.3
 	github.com/emersion/go-sasl v0.0.0-20190520160400-47d427600317 // indirect
 	github.com/go-sql-driver/mysql v1.4.1 // indirect
