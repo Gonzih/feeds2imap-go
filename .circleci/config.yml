@@ -4,8 +4,6 @@ jobs:
     docker:
       - image: circleci/golang:1.12
     working_directory: ~/app
-    environment:
-      GO111MODULE: on
     steps:
       - checkout
       - run: go get
