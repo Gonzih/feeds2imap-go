@@ -60,6 +60,8 @@ github.com/emersion/go-message v0.10.6 h1:f3VHk6wsDN0ZcH8uGYoXnHmaFNX3fJ8KYjBz8i
 github.com/emersion/go-message v0.10.6/go.mod h1:3h+HsGTCFHmk4ngJ2IV/YPhdlaOcR6hcgqM3yca9v7c=
 github.com/emersion/go-message v0.10.7 h1:wVC8P985qmmL9PGV/VlkBikVqFirxTeYv9xi+YyCprU=
 github.com/emersion/go-message v0.10.7/go.mod h1:C4jnca5HOTo4bGN9YdqNQM9sITuT3Y0K6bSUw9RklvY=
+github.com/emersion/go-message v0.10.8 h1:1l1Vb+0By9U1ITTH3FgKfJQWQ9sTI3N1smPe6SS3QXY=
+github.com/emersion/go-message v0.10.8/go.mod h1:C4jnca5HOTo4bGN9YdqNQM9sITuT3Y0K6bSUw9RklvY=
 github.com/emersion/go-sasl v0.0.0-20161116183048-7e096a0a6197 h1:rDJPbyliyym8ZL/Wt71kdolp6yaD4fLIQz638E6JEt0=
 github.com/emersion/go-sasl v0.0.0-20161116183048-7e096a0a6197/go.mod h1:G/dpzLu16WtQpBfQ/z3LYiYJn3ZhKSGWn83fyoyQe/k=
 github.com/emersion/go-sasl v0.0.0-20190520160400-47d427600317 h1:tYZxAY8nu3JJQKios9f27Sbvbkfm4XHXT476gVtszu0=
