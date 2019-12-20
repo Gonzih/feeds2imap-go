@@ -14,7 +14,7 @@ require (
 	github.com/coreos/go-systemd v0.0.0-20190719114852-fd7a80b32e1f // indirect
 	github.com/dgryski/go-sip13 v0.0.0-20190329191031-25c5027a8c7b // indirect
 	github.com/emersion/go-imap v1.0.2
-	github.com/emersion/go-message v0.10.8
+	github.com/emersion/go-message v0.11.0
 	github.com/emersion/go-sasl v0.0.0-20190704090222-36b50694675c // indirect
 	github.com/go-kit/kit v0.9.0 // indirect
 	github.com/go-sql-driver/mysql v1.4.1 // indirect
