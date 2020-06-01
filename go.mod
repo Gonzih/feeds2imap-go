@@ -15,7 +15,6 @@ require (
 	github.com/dgryski/go-sip13 v0.0.0-20190329191031-25c5027a8c7b // indirect
 	github.com/emersion/go-imap v1.0.4
 	github.com/emersion/go-message v0.11.2
-	github.com/emersion/go-sasl v0.0.0-20190704090222-36b50694675c // indirect
 	github.com/go-kit/kit v0.9.0 // indirect
 	github.com/go-sql-driver/mysql v1.4.1 // indirect
 	github.com/golang/groupcache v0.0.0-20190702054246-869f871628b6 // indirect
@@ -28,8 +27,6 @@ require (
 	github.com/konsorten/go-windows-terminal-sequences v1.0.2 // indirect
 	github.com/kr/pty v1.1.8 // indirect
 	github.com/lib/pq v1.2.0 // indirect
-	github.com/magiconair/properties v1.8.1 // indirect
-	github.com/martinlindhe/base36 v1.0.0 // indirect
 	github.com/mattn/go-sqlite3 v1.13.0
 	github.com/mmcdole/gofeed v1.0.0-beta2
 	github.com/mmcdole/goxpp v0.0.0-20181012175147-0068e33feabf // indirect
@@ -46,7 +43,7 @@ require (
 	github.com/spf13/pflag v1.0.5
 	github.com/spf13/viper v1.6.2
 	github.com/stretchr/objx v0.2.0 // indirect
-	github.com/stretchr/testify v1.5.1
+	github.com/stretchr/testify v1.6.0
 	github.com/ugorji/go v1.1.7 // indirect
 	go.etcd.io/bbolt v1.3.3 // indirect
 	golang.org/x/crypto v0.0.0-20190701094942-4def268fd1a4 // indirect
