@@ -4,7 +4,7 @@ go 1.12
 
 require (
 	github.com/emersion/go-imap v1.2.1
-	github.com/emersion/go-message v0.15.0
+	github.com/emersion/go-message v0.16.0
 	github.com/google/uuid v1.3.0
 	github.com/jmoiron/sqlx v1.3.1
 	github.com/mattn/go-sqlite3 v2.0.3+incompatible
