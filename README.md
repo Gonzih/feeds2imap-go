@@ -8,7 +8,7 @@ Store your RSS/Atom subscription in your imap inbox
 ## Installation
 
 ```bash
-go get github.com/Gonzih/feeds2imap-go
+go install github.com/Gonzih/feeds2imap-go@latest
 ```
 
 ## Usage
